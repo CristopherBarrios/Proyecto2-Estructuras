@@ -50,6 +50,26 @@ public class Interprete {
                     }
 
                 }
+                if (terminos[i].equals(">") && inicio){
+                    System.out.println("Mayor");
+                    double a = myStack.pop();
+                    double b = myStack.pop();
+                    if(a>b){
+                        resultado = "Verdadero";
+                    }else{
+                        resultado = "Falso";
+                    }
+                }
+                if (terminos[i].equals("<") && inicio){
+                    System.out.println("Menor");
+                    double a = myStack.pop();
+                    double b = myStack.pop();
+                    if(a>b){
+                        resultado = "Falso";
+                    }else{
+                        resultado = "Verdadero";
+                    }
+                }
                 if (terminos[i].equals("(") && inicio && cont1-1==cont2){
                     System.out.println("Finalizado");
                     cont2++;

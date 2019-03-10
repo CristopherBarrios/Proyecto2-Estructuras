@@ -7,8 +7,10 @@ public class Parser {
         for (int x=operacion.length()-1;x>=0;x--)
             cadena = cadena + operacion.charAt(x);
         String[] words = cadena.split(" ");
-        for (int i =0; i < words.length; i++){
-            System.out.println(words[i]);
+        int index = 0;
+        for (String i: words) {
+            System.out.println(words[index]);
+            index++;
         }
         return  words;
         }
