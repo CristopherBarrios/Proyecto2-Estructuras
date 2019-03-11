@@ -1,4 +1,6 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class Interprete {
@@ -9,6 +11,7 @@ public class Interprete {
         int cont1 = 0;
         int cont2 = 0;
         Stack<Double> myStack = new Stack<>();
+        Map funciones = new HashMap();
         while(seguir){
             for(int i =0; i < terminos.length; i++){
                 if (terminos[i].equals(")")){
@@ -76,6 +79,10 @@ public class Interprete {
                 }
                 if (terminos[i].equals("0")||terminos[i].equals("1")||terminos[i].equals("2")||terminos[i].equals("3")||terminos[i].equals("4")||terminos[i].equals("5")||terminos[i].equals("6")||terminos[i].equals("7")||terminos[i].equals("8")||terminos[i].equals("9")){
                     myStack.push(Double.parseDouble(terminos[i]));
+                }
+                if (terminos[i].equals("Defun")){
+                    funciones.put(terminos[i], "");
+                    funciones.get(terminos[i]);
                 }
             }
         }

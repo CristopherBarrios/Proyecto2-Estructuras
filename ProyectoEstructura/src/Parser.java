@@ -1,12 +1,13 @@
-import java.util.List;
-import java.util.Stack;
-
 public class Parser {
     public String[] parse (String operacion){
-        String cadena = "";
-        for (int x=operacion.length()-1;x>=0;x--)
-            cadena = cadena + operacion.charAt(x);
-        String[] words = cadena.split(" ");
+        String[] words = operacion.split(" ");
+        String[] invertida = new String[words.length];
+        int x = 0;
+        for (int i = words.length-1; i>=0;i--){
+            invertida[x] = words[i];
+            x++;
+        }
+        words = invertida;
         int index = 0;
         for (String i: words) {
             System.out.println(words[index]);
