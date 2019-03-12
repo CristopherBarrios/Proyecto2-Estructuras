@@ -13,7 +13,7 @@ public class Interprete {
         Stack<Double> myStack = new Stack<>();
         Map funciones = new HashMap();
         while(seguir){
-            for(int i =0; i < terminos.length; i++){
+            for(int i = 0; i < terminos.length; i++){
                 if (terminos[i].equals(")")){
                     inicio = true;
                     cont1++;
@@ -22,36 +22,51 @@ public class Interprete {
                 }
                 if (terminos[i].equals("+") && inicio){
                     System.out.println("Sumar");
-                    double a = myStack.pop();
-                    double b = myStack.pop();
-                    resultado = Double.toString(a+b);
-                    myStack.push(Double.parseDouble(resultado));
+                    for(int x=0; x<myStack.size(); x++ ){
+                        if (myStack.size()!= 1 ){
+                            double a = myStack.pop();
+                            double b = myStack.pop();
+                            resultado = Double.toString(a+b);
+                            myStack.push(Double.parseDouble(resultado));
+                        }
+                    }
                 }
                 if (terminos[i].equals("-") && inicio){
                     System.out.println("Restar");
-                    double a = myStack.pop();
-                    double b = myStack.pop();
-                    resultado = Double.toString(a-b);
-                    myStack.push(Double.parseDouble(resultado));
+                    for(int x=0; x<myStack.size(); x++ ){
+                        if (myStack.size()!= 1 ){
+                            double a = myStack.pop();
+                            double b = myStack.pop();
+                            resultado = Double.toString(a-b);
+                            myStack.push(Double.parseDouble(resultado));
+                        }
+                    }
                 }
                 if (terminos[i].equals("*") && inicio){
                     System.out.println("Multiplicar");
-                    double a = myStack.pop();
-                    double b = myStack.pop();
-                    resultado = Double.toString(a*b);
-                    myStack.push(Double.parseDouble(resultado));
+                    for(int x=0; x<myStack.size(); x++ ){
+                        if (myStack.size()!= 1 ){
+                            double a = myStack.pop();
+                            double b = myStack.pop();
+                            resultado = Double.toString(a*b);
+                            myStack.push(Double.parseDouble(resultado));
+                        }
+                    }
                 }
                 if (terminos[i].equals("/") && inicio){
                     System.out.println("Dividir");
-                    double a = myStack.pop();
-                    double b = myStack.pop();
-                    if (b != 0){
-                        resultado = Double.toString(a/b);
-                        myStack.push(Double.parseDouble(resultado));
-                    }else{
-                        System.out.println("No se puede dividir por 0");
+                    for(int x=0; x<myStack.size(); x++ ){
+                        if (myStack.size()!= 1 ){
+                            double a = myStack.pop();
+                            double b = myStack.pop();
+                            if (b != 0){
+                                resultado = Double.toString(a/b);
+                                myStack.push(Double.parseDouble(resultado));
+                            }else{
+                                System.out.println("No se puede dividir por 0");
+                            }
+                        }
                     }
-
                 }
                 if (terminos[i].equals(">") && inicio){
                     System.out.println("Mayor");
