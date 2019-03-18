@@ -16,16 +16,17 @@ public class ParserTest {
 
 // prueba interprete
 
-
 class InterpreteTest {
 
 	@Test
 	void testInterpret() {
 		 Interprete InterPrueba = new Interprete();
-		 
+		 String instruccion = "( + 2 1 )";
+		 Parser myParser = new Parser();
+	     InterPrueba.interpret(myParser.parse(instruccion));
+	     assertEquals("",instruccion, 3);
+	        }
 		
-	}
-
 	
 
-}
+	}
