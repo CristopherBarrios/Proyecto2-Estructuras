@@ -7,6 +7,10 @@ import java.util.Stack;
  * Clase que traduce los comandos ingresados por el usuario, evalua palabras claves y operandos
  */
 public class Interprete {
+    public Stack<String> myStack = new Stack<>();
+    public Map<String,String> funciones = new HashMap<String,String>();
+    Parser par = new Parser();
+
     public String interpret (String[] terminos){
         Boolean inicio = false;
         Boolean seguir = true;
@@ -15,8 +19,6 @@ public class Interprete {
         String resultado = "0";
         int cont1 = 0;
         int cont2 = 0;
-        Stack<String> myStack = new Stack<>();
-        Map<String,String> funciones = new HashMap<String,String>();
         while(seguir){
             for(int i = 0; i < terminos.length; i++){
                 Double numero;
@@ -43,7 +45,39 @@ public class Interprete {
                             parcu = parcu+terminos[y]+" ";
                         }
                         funciones.put(terminos[i+1],parcu);
-                        System.out.println("Nombre: "+terminos[i+1]+" Cuerpo: "+funciones.values());
+                    }
+                    if(funciones.containsKey(terminos[i])&&inicio){
+                        Map<String,String> var = new HashMap<String,String>();
+                        isfun = true;
+                        cont2++;
+                        inicio = false;
+                        String todo = funciones.get(terminos[i]);
+                        String[] parts = todo.split(" \\) \\( ");
+                        String parametros = parts[0];
+                        String cuerpo = parts[1];
+                        parametros = parametros.replace("( ", "");
+                        System.out.println(cuerpo);
+                        cuerpo = "( "+cuerpo;
+                        System.out.println(cuerpo);
+                        parts = par.parse(parametros);
+                        String asignacion= "";
+                        for(int j = i+1;j<terminos.length-1;j++){
+                            asignacion =asignacion+terminos[j]+" ";
+                        }
+                        System.out.println(asignacion);
+                        asignacion = asignacion.replace(" ) ", "");
+                        asignacion = asignacion.replace("( ", "");
+                        String[] numeros = asignacion.split(" ");
+                        for( int k = 0; k<parts.length; k++){
+                            var.put(parts[k],numeros[k]);
+                        }
+                        String[] cambio = par.parse(cuerpo);
+                        for(int n=0;n<cambio.length;n++){
+                            if(var.containsKey(cambio[n])){
+                                cambio[n]=var.get(cambio[n]);
+                            }
+                        }
+                        resultado= interpret(cambio);
                     }
                     if (terminos[i].equals("+") && inicio && !isfun){
                         myStack.push(terminos[i]);

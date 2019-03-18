@@ -7,11 +7,11 @@ public class Main {
         boolean bucle = true;
         input = new Scanner(System.in);
         System.out.println("Para este interprete recuerde siempre agregar un espacio despues de cada termino que introdusca" );
+        Parser myParser = new Parser();
+        Interprete myInter = new Interprete();
         while (bucle){
             System.out.println("Intruccion: ");
             String instruccion = (input.nextLine());
-            Parser myParser = new Parser();
-            Interprete myInter = new Interprete();
             System.out.println(myInter.interpret(myParser.parse(instruccion)));
         }
     }
