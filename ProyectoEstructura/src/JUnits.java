@@ -13,3 +13,19 @@ public class ParserTest {
 	}
 
 }
+
+// prueba interprete
+
+
+class InterpreteTest {
+
+	@Test
+	void testInterpret() {
+		 Interprete InterPrueba = new Interprete();
+		 
+		
+	}
+
+	
+
+}
