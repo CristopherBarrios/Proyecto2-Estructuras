@@ -10,11 +10,13 @@ public class Interprete {
     public String interpret (String[] terminos){
         Boolean inicio = false;
         Boolean seguir = true;
+        Boolean bool = false;
+        Boolean isfun = false;
         String resultado = "0";
         int cont1 = 0;
         int cont2 = 0;
         Stack<String> myStack = new Stack<>();
-        Map funciones = new HashMap();
+        Map<String,String> funciones = new HashMap<String,String>();
         while(seguir){
             for(int i = 0; i < terminos.length; i++){
                 Double numero;
@@ -22,42 +24,49 @@ public class Interprete {
                     numero=Double.parseDouble(terminos[i]);
                     myStack.push(terminos[i]);
                 }catch(NumberFormatException ex){
-                    if (terminos[i].equals("(")){
+                    if (terminos[i].equals("(")&&cont1!=0&& inicio){
+                        cont1++;
+                    }
+                    if (terminos[i].equals("(")&&cont1==0){
                         inicio = true;
                         cont1++;
                     }else{
                         seguir = false;
                     }
-                    if (terminos[i].equals("+") && inicio){
-                        System.out.println("Sumar");
+                    if (terminos[i].equals("DEFUN")){
+                        isfun = true;
+                        cont2++;
+                        resultado = "Funcion creada";
+                        inicio = false;
+                        String parcu= "";
+                        for(int y = i+2;y<terminos.length-1;y++){
+                            parcu = parcu+terminos[y]+" ";
+                        }
+                        funciones.put(terminos[i+1],parcu);
+                        System.out.println("Nombre: "+terminos[i+1]+" Cuerpo: "+funciones.values());
+                    }
+                    if (terminos[i].equals("+") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    if (terminos[i].equals("-") && inicio){
-                        System.out.println("Restar");
+                    if (terminos[i].equals("-") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    if (terminos[i].equals("*") && inicio){
-                        System.out.println("Multiplicar");
+                    if (terminos[i].equals("*") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    if (terminos[i].equals("/") && inicio){
-                        System.out.println("Dividir");
+                    if (terminos[i].equals("/") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    if (terminos[i].equals(">") && inicio){
-                        System.out.println("Mayor");
+                    if (terminos[i].equals(">") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    if (terminos[i].equals("<") && inicio){
-                        System.out.println("Menor");
+                    if (terminos[i].equals("<") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    if (terminos[i].equals("EQUAL") && inicio){
-                        System.out.println("Igual");
+                    if (terminos[i].equals("EQUAL") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
-                    System.out.println(myStack);
-                    if (terminos[i].equals(")") && inicio){
+                    if (terminos[i].equals(")") && inicio && !isfun){
                         Stack<Double> num = new Stack<>();
                         Boolean isOpe = false;
                         while(!isOpe){
@@ -67,8 +76,6 @@ public class Interprete {
                                 num.push(Double.parseDouble(myStack.pop()));
                             }
                         }
-                        System.out.println("Stack: "+myStack);
-                        System.out.println("Stack num:"+num);
                         if(myStack.peek().equals("+")){
                             double res = num.pop();
                             for (double x: num) {
@@ -128,14 +135,19 @@ public class Interprete {
                             double b = num.pop();
                             if(a==b){
                                 resultado = "Verdadero";
+                                bool = true;
                             }else{
                                 resultado = "Falso";
+                                bool = false;
                             }
                         }
                         cont2++;
                     }
                 }
             }
+        }
+        if(cont1!=cont2||(!inicio&&!isfun)){
+            resultado = "Error de sintaxis";
         }
         return resultado;
     }

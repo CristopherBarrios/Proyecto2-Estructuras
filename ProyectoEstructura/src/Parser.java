@@ -3,7 +3,6 @@ public class Parser {
         String[] words = operacion.split(" ");
         int index = 0;
         for (String i: words) {
-            System.out.println(words[index]);
             index++;
         }
         return  words;
