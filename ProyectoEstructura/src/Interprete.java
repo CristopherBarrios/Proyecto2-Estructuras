@@ -11,21 +11,28 @@ public class Interprete {
     public Map<String,String> funciones = new HashMap<String,String>();
     Parser par = new Parser();
 
+    /**
+     * Metodo principal del programa que recorre una lista y realiza las operaciones especificadas
+     * @param terminos, recibe una lista de strings que debe iterar
+     * @return, un string con el resultado de los comandos
+     */
     public String interpret (String[] terminos){
         Boolean inicio = false;
         Boolean seguir = true;
-        Boolean bool = false;
         Boolean isfun = false;
         String resultado = "0";
         int cont1 = 0;
         int cont2 = 0;
         while(seguir){
+            //Recorrer la lista
             for(int i = 0; i < terminos.length; i++){
                 Double numero;
+                //Si es un numero agregarlo al stack
                 try{
                     numero=Double.parseDouble(terminos[i]);
                     myStack.push(terminos[i]);
                 }catch(NumberFormatException ex){
+                    //Si no es un numero realizar operaciones
                     if (terminos[i].equals("(")&&cont1!=0&& inicio){
                         cont1++;
                     }
@@ -35,6 +42,7 @@ public class Interprete {
                     }else{
                         seguir = false;
                     }
+                    //Definicion de funcion
                     if (terminos[i].equals("DEFUN")){
                         isfun = true;
                         cont2++;
@@ -46,6 +54,23 @@ public class Interprete {
                         }
                         funciones.put(terminos[i+1],parcu);
                     }
+                    //Condicianales
+                    if (terminos[i].equals("COND")&&inicio){
+                        isfun = true;
+                        cont2++;
+                        inicio = false;
+                        String condiciones = "";
+                        for(int y = i+2;y<terminos.length-2;y++){
+                            condiciones = condiciones+terminos[y]+" ";
+                        }
+                        System.out.println(condiciones);
+                        String[] parts = condiciones.split(" \\) \\( ");
+                        for( int x = 0;x<parts.length;x++){
+                            System.out.println(parts[x]);
+                            String[] yu = parts[x].split("\\)");
+                        }
+                    }
+                    //Mandar a llamar una funcion
                     if(funciones.containsKey(terminos[i])&&inicio){
                         Map<String,String> var = new HashMap<String,String>();
                         isfun = true;
@@ -56,15 +81,12 @@ public class Interprete {
                         String parametros = parts[0];
                         String cuerpo = parts[1];
                         parametros = parametros.replace("( ", "");
-                        System.out.println(cuerpo);
                         cuerpo = "( "+cuerpo;
-                        System.out.println(cuerpo);
                         parts = par.parse(parametros);
                         String asignacion= "";
                         for(int j = i+1;j<terminos.length-1;j++){
                             asignacion =asignacion+terminos[j]+" ";
                         }
-                        System.out.println(asignacion);
                         asignacion = asignacion.replace(" ) ", "");
                         asignacion = asignacion.replace("( ", "");
                         String[] numeros = asignacion.split(" ");
@@ -79,6 +101,7 @@ public class Interprete {
                         }
                         resultado= interpret(cambio);
                     }
+                    //Añadir al stack principal si es un operador
                     if (terminos[i].equals("+") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
@@ -100,6 +123,7 @@ public class Interprete {
                     if (terminos[i].equals("EQUAL") && inicio && !isfun){
                         myStack.push(terminos[i]);
                     }
+                    //Al encontrar un parentesis cerrado realizar operaciones dentro del stack principal
                     if (terminos[i].equals(")") && inicio && !isfun){
                         Stack<Double> num = new Stack<>();
                         Boolean isOpe = false;
@@ -110,6 +134,7 @@ public class Interprete {
                                 num.push(Double.parseDouble(myStack.pop()));
                             }
                         }
+                        //Suma
                         if(myStack.peek().equals("+")){
                             double res = num.pop();
                             for (double x: num) {
@@ -119,6 +144,7 @@ public class Interprete {
                             myStack.push(Double.toString(res));
                             resultado = Double.toString(res);
                         }
+                        //Resta
                         if(myStack.peek().equals("-")){
                             double res = num.pop();
                             for (double x: num) {
@@ -128,6 +154,7 @@ public class Interprete {
                             myStack.push(Double.toString(res));
                             resultado = Double.toString(res);
                         }
+                        //Division
                         if(myStack.peek().equals("/")){
                             double res = num.pop();
                             for (double x: num) {
@@ -137,6 +164,7 @@ public class Interprete {
                             myStack.push(Double.toString(res));
                             resultado = Double.toString(res);
                         }
+                        //Multiplicacion
                         if(myStack.peek().equals("*")){
                             double res = num.pop();
                             for (double x: num) {
@@ -146,6 +174,7 @@ public class Interprete {
                             myStack.push(Double.toString(res));
                             resultado = Double.toString(res);
                         }
+                        //Mayor
                         if(myStack.peek().equals(">")){
                             double a = num.pop();
                             double b = num.pop();
@@ -155,6 +184,7 @@ public class Interprete {
                                 resultado = "Falso";
                             }
                         }
+                        //Menor
                         if(myStack.peek().equals("<")){
                             double a = num.pop();
                             double b = num.pop();
@@ -164,15 +194,14 @@ public class Interprete {
                                 resultado = "Verdadero";
                             }
                         }
+                        //Igual
                         if(myStack.peek().equals("EQUAL")){
                             double a = num.pop();
                             double b = num.pop();
                             if(a==b){
                                 resultado = "Verdadero";
-                                bool = true;
                             }else{
                                 resultado = "Falso";
-                                bool = false;
                             }
                         }
                         cont2++;
@@ -180,6 +209,7 @@ public class Interprete {
                 }
             }
         }
+        //Si no cumple requisitos de los parentesis mostrar error de sintaxis
         if(cont1!=cont2||(!inicio&&!isfun)){
             resultado = "Error de sintaxis";
         }
